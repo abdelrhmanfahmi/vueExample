@@ -9,15 +9,15 @@
                             <form class="form-group" @submit="RegisterForm">
                                 <div class="col mb-3">
                                     <label>Name</label>
-                                    <input type="text" class="form-control" name="name" v-model="user.name" placeholder="Enter Name">
+                                    <input type="text" class="form-control" name="name" v-model="name" placeholder="Enter Name">
                                 </div>
                                 <div class="col mb-3">
                                     <label>E-mail</label>
-                                    <input type="email" class="form-control" name="email" v-model="user.email" placeholder="Enter E-mail">
+                                    <input type="email" class="form-control" name="email" v-model="email" placeholder="Enter E-mail">
                                 </div>
                                 <div class="col mb-3">
                                     <label>Password</label>
-                                    <input type="password" class="form-control" name="password" v-model="user.password" placeholder="Enter Password">
+                                    <input type="password" class="form-control" name="password" v-model="password" placeholder="Enter Password">
                                 </div>
                                 <div class="col mb-3 d-flex justify-content-center">
                                     <button type="submit" class="btn btn-success">Register</button>
@@ -32,22 +32,24 @@
 </template>
 
 <script>
-    import axios from 'axios';
+    import * as login_service from '../services/login_service';
     export default {
         name: "register-app",
         data(){
             return {
-                user:{
-                    name:'',
-                    email:'',
-                    password:''            
-                }
+                name:'',
+                email:'',
+                password:''
             }
         },
         methods:{
             async RegisterForm(e){
                 e.preventDefault();
-                await axios.post('register' , this.user);
+                let formData = new FormData();
+                formData.append('name' , this.name);
+                formData.append('email' , this.email);
+                formData.append('password' , this.password);
+                await login_service.register(formData);
                 this.$router.push('/login');
             }
         }

@@ -1,12 +1,11 @@
 import Vue from "vue";
 import VueRouter from "vue-router";
 
-import HelloWorld from './components/HelloWorld.vue'
-import About from './components/About.vue'
-import Login from './components/Login.vue'
-import Register from './components/Register.vue'
-import Home from './components/Home.vue'
-// import vuex from './vuex';
+import HelloWorld from './views/HelloWorld.vue'
+import Login from './views/Login.vue'
+import About from './views/About.vue'
+import Register from './views/Register.vue'
+import Home from './views/Home.vue'
 
 Vue.use(VueRouter);
 
@@ -30,10 +29,11 @@ const routes = [
     {
         path: '/register',
         name: 'register-app',
-        component: Register
+        component: Register,
+        meta: { requiresVisitor: true }
     },
     {
-        path: '/Home',
+        path: '/home',
         name: 'home-page',
         component: Home,
         meta: { requiresAuth: true }
