@@ -6,6 +6,8 @@ import Login from './views/Login.vue'
 import About from './views/About.vue'
 import Register from './views/Register.vue'
 import Home from './views/Home.vue'
+import Student from './views/Student.vue'
+import * as login_service from './services/login_service';
 
 Vue.use(VueRouter);
 
@@ -38,12 +40,58 @@ const routes = [
         component: Home,
         meta: { requiresAuth: true }
     },
+    {
+        path: '/students',
+        name: 'students-page',
+        component: Student,
+        meta: { requiresAuth: true }
+    },
 ];
 
 const router = new VueRouter({
     mode: "history",
     base: process.env.BASE_URL,
     routes,
+  });
+
+  function isLoggedIn() {
+    return localStorage.getItem('isLoggedIn');
+  }
+  
+  async function checkUserToken(){
+    const currentToken = localStorage.getItem('token');
+    console.log(currentToken);
+    const responseToken = await login_service.me();
+    console.log(responseToken.data.access_token);
+    if(responseToken !== currentToken ){
+        localStorage.removeItem("token");
+        localStorage.removeItem("isLoggedIn");
+        this.$store.dispatch("user", null);
+        location.href = "/login";
+    }
+  }
+  
+  router.beforeEach((to, from, next) => {
+    if (to.matched.some(record => record.meta.requiresAuth)) {
+      if (!isLoggedIn()) {
+        next({
+          name: 'login-app',
+        })
+      } else {
+        next();
+        checkUserToken();
+      }
+    } else if (to.matched.some(record => record.meta.requiresVisitor)) {
+      if (isLoggedIn()) {
+        next({
+          name: 'home-page',
+        })
+      } else {
+        next()
+      }
+    } else {
+      next()
+    }
   });
   
 export default router;

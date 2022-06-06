@@ -18,6 +18,11 @@
                         <a class="nav-link" href="javascript:void(0);">About</a>
                     </router-link>
                   </li>
+                  <li class="nav-item">
+                    <router-link :to="'/students'" class="nav-item" exact>
+                        <a class="nav-link" href="javascript:void(0);">Students</a>
+                    </router-link>
+                  </li>
                 </ul>
                 
                 <!-- Not Logged In -->
